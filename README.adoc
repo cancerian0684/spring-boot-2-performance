@@ -1,0 +1,36 @@
+= spring-boot-2-performance metrics
+
+== Install wrk tool for performance testing
+
+.wrk - a HTTP benchmarking tool
+****
+
+wrk is a modern HTTP benchmarking tool capable of generating significant load when run on a single multi-core CPU. It combines a multithreaded design with scalable event notification systems such as epoll and kqueue.
+
+.More Information
+https://github.com/wg/wrk
+****
+
+.Installation on Ubuntu
+To install wrk on ubuntu 16.04 system, just run the below command
+
+    sudo apt install wrk
+
+Now wrk is ready for the testing.
+
+== Step 5. Benchmarking
+Now start the Spring Boot application and run the below command from terminal
+
+    wrk -t8 -c40 -d30s http://localhost:8080/api/perf
+
+This will launch 8 threads and keep 40 HTTP open connections for a duration of 30s and measure the results.
+
+.Benchmark details
+image::https://s3.shunyafoundation.com/s3/11d278259b28aadc91593246148bcae76d88872d/wrk-output.png[]
+
+My machine is 16GB DDR3, Xeon E31245, 2011 Model Desktop
+
+.cpu-information
+image::https://s3.shunyafoundation.com/s3/5c73accc12fed3c0e861a1c66638d3859de9ed14/cpu-info.png[]
+
+So we can see that a simple ping controller gives throughput of 31000 requests per second, which is not bad at all.
