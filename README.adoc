@@ -18,10 +18,10 @@ To install wrk on ubuntu 16.04 system, just run the below command
 
 Now wrk is ready for the testing.
 
-== Step 5. Benchmarking
+== Benchmarking Metrics
 Now start the Spring Boot application and run the below command from terminal
 
-    wrk -t8 -c40 -d30s http://localhost:8080/api/perf
+    $ wrk -t8 -c40 -d30s http://localhost:8080/api/perf
 
 This will launch 8 threads and keep 40 HTTP open connections for a duration of 30s and measure the results.
 
@@ -34,3 +34,30 @@ My machine is 16GB DDR3, Xeon E31245, 2011 Model Desktop
 image::https://s3.shunyafoundation.com/s3/5c73accc12fed3c0e861a1c66638d3859de9ed14/cpu-info.png[]
 
 So we can see that a simple ping controller gives throughput of 31000 requests per second, which is not bad at all.
+
+== Using h2load for HTTP Benchmarking
+h2load is another high performance HTTP benchmarking tool that we can use to bench mark our API.
+
+.h2load to send 100000 requests using 40 concurrency level
+    $ h2load -n100000 -c32 -m10 --h1 http://localhost:8080/api/perf
+
+.Response
+[source, txt]
+----
+starting benchmark...
+spawning thread #0: 32 total client(s). 100000 total requests
+Application protocol: http/1.1
+
+finished in 1.62s, 61670.27 req/s, 5.35MB/s
+requests: 100000 total, 100000 started, 100000 done, 100000 succeeded, 0 failed, 0 errored, 0 timeout
+status codes: 100000 2xx, 0 3xx, 0 4xx, 0 5xx
+traffic: 8.68MB (9100000) total, 4.20MB (4400000) headers (space savings 0.00%), 1.91MB (2000000) data
+                     min         max         mean         sd        +/- sd
+time for request:      303us     38.16ms      4.68ms      3.23ms    83.42%
+time for connect:      197us      3.18ms      1.60ms       864us    59.38%
+time to 1st byte:     3.02ms     28.45ms     10.76ms      5.65ms    78.13%
+req/s           :    1929.11     2451.89     2142.68      163.55    62.50%
+
+----
+
+We can see that with latest version of Spring Boot 2.1.4, we can get a throughput of `60K requests/second` on the same Ubuntu 18.04.2 server.
