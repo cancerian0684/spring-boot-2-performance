@@ -6,17 +6,15 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static org.springframework.web.reactive.function.BodyInserters.fromObject;
-
 @Component
 public class HelloController {
 
     public Mono<ServerResponse> ping(ServerRequest serverRequest) {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(fromObject("{\n" +
-                "  \"status\": \"ok\"\n" +
-                "}"));
+                .bodyValue("{\n" +
+                        "  \"status\": \"ok\"\n" +
+                        "}");
     }
 
 }
